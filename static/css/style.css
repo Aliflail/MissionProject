@@ -1,12 +1,4 @@
-* {
-  padding: 0px;
-  margin: 0px;
-  background-color: red; }
-
-body .question {
-  margin: 0 auto; }
-  body .question ul {
-    list-style-type: none;
-    list-style-position: inside; }
+body {
+  background-color: grey; }
 
 /*# sourceMappingURL=style.css.map */
