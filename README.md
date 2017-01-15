@@ -4,5 +4,5 @@ One more test feature we wish implement is generating tags for each question eg 
 The front end of the proposed design for the website is shown. 
 ![alt tag](https://github.com/Aliflail/MissionProject/blob/master/IMG_20170115_125441.jpg)
 ![alt tag](https://github.com/Aliflail/MissionProject/blob/master/IMG_20170115_125454.jpg)
-![alt tag](https://github.com/Aliflail/MissionProject/blob/master/IMG_20170115_125405.jpg)
-![alt tag](https://github.com/Aliflail/MissionProject/blob/master/IMG_20170115_125424.jpg)
+![alt tag](https://github.com/Aliflail/MissionProject/blob/master/IMG_20170115_125505.jpg)
+![alt tag](https://github.com/Aliflail/MissionProject/blob/master/IMG_20170115_125524.jpg)
