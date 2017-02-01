@@ -1,0 +1,21 @@
+* {
+  padding: 0px; }
+
+body {
+  background-color: violet; }
+  body nav {
+    padding: 0px 2%; }
+    body nav .container-fluid .navbar-header .navbar-brand img {
+      height: 30px; }
+  body .wrapper .signup-form {
+    margin-right: 100px;
+    background-color: white;
+    border-radius: 10%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    box-shadow: 1px 8px 27px -5px #000000; }
+  body .wrapper .profile-side-view {
+    height: 1000px;
+    background-color: red; }
+
+/*# sourceMappingURL=style.css.map */
