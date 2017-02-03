@@ -6,7 +6,14 @@ from .models import Profile
 class ProfileForm(forms.ModelForm):
     class Meta:
         model= Profile
-        fields=['admissionno']
+        fields=['admissionno','status']
+
+class UserRegisterForm(forms.ModelForm):
+    password=forms.CharField(widget=forms.PasswordInput)
+    class Meta:
+        model=User
+        fields=['username','password','email']
+
 
 class UserForm(forms.ModelForm):
     password=forms.CharField(widget=forms.PasswordInput)

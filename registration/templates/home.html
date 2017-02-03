@@ -1,7 +1,66 @@
 {% extends 'base.html'%}
 {% block title %}HomePage{% endblock %}
 {% block body %}
-<div class="jumbotron col-md-3 profile-side-view ">
-	<a href='{% url 'logout' %}'>logout</a>
-</div>
+<body class="loggedinpage">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <a class="navbar-brand" href="#">
+			<img alt="Brand" src="...">
+		  </a>
+		</div>
+		<div class="nav navbar-left">
+			<ul class="nav nav-pills">
+			  <li role="presentation" class="active"><a href="#">Home</a></li>
+			  <li role="presentation"><a href="#">Profile</a></li>
+
+			</ul>
+		</div>
+		<div class="nav navbar-right">
+			<ul class="nav nav-pills">
+			<li><a href="{% url 'logout' %}">logout</a></li>
+	  		</ul>
+		</div>
+	  </div>
+	</nav>
+
+	<div class="jumbotron  profile-side-view col-md-3 col-md-offset-1 ">
+		<h2>{{user.username}}</h2>
+	<div class="list-group">
+	  <a href="#" class="list-group-item active">
+		<h4 class="list-group-item-heading">Test Results</h4>
+		<p class="list-group-item-text">...</p>
+	  </a>
+		<a href="#" class="list-group-item ">
+		<h4 class="list-group-item-heading">Present Rank</h4>
+		<p class="list-group-item-text">...</p>
+	  </a>
+		<a href="#" class="list-group-item ">
+		<h4 class="list-group-item-heading">Pending</h4>
+		<p class="list-group-item-text">...</p>
+		</a>
+	</div>
+	</div>
+
+	<div class="col-md-7">
+		<div class="panel panel-default ">
+		  <div class="panel-heading">
+			<h3 class="panel-title">Test 1</h3>
+		  </div>
+		  <div class="panel-body">
+			Panel content
+		  </div>
+		</div>
+	</div>
+		<div class="col-md-7">
+		<div class="panel panel-default ">
+		  <div class="panel-heading">
+			<h3 class="panel-title">Test 2</h3>
+		  </div>
+		  <div class="panel-body">
+			Panel content
+		  </div>
+		</div>
+	</div>
+</body>
 {% endblock %}

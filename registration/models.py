@@ -5,6 +5,12 @@ from django.db.models.signals import post_save
 class Profile(models.Model):
     user=models.OneToOneField(settings.AUTH_USER_MODEL)
     admissionno=models.IntegerField()
+    choice = (
+        ('PC', 'Placement_Cell'),
+        ('TC', 'Training_Cell'),
+        ('ST', 'Student'),
+    )
+    status = models.CharField(max_length=2, choices=choice,default='ST')
     def _str_(self):
         return self.user.username
     def __unicode__(self):
