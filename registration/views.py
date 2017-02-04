@@ -3,7 +3,7 @@ from django.views import View
 from .forms import UserForm,ProfileForm,LoginForm,UserRegisterForm
 from django.contrib.auth import authenticate, login ,logout,get_user_model
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile,Tests,Question,Choice
 class HomeView(View):
 	def get(self ,request ,*arg ,**kwargs):
 		return render(request ,'home.html',{})
@@ -61,3 +61,11 @@ class loginview(View):
 def logoutview(request):
 	logout(request)
 	return redirect('/')
+class TestView(View):
+	template_name="test.html"
+	def get(self,request):
+		Test=Tests.objects.all()
+		context={
+			"Test":Test,
+		}
+		return render(request,self.template_name,context)

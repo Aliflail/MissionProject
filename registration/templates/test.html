@@ -1,4 +1,18 @@
 {% extends 'base.html' %}
-{% block body%}
+{% block body %}
 
-{% endblock%}
+{% for t in Test %}
+    {{ t.test_text }}
+</br>
+    {% for q in t.question_set.all %}
+        </br>
+        {{ q.question }}
+
+        {% for c in q.choice_set.all %}
+        </br>
+            <input type="radio">
+            {{ c.choice }}
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
+{% endblock %}

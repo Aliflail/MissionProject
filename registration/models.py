@@ -22,3 +22,23 @@ def post_save_user_model_reciever(sender,instance , created,*args,**kwargs):
         except:
             pass
 post_save.connect(post_save_user_model_reciever,sender=settings.AUTH_USER_MODEL)
+
+#Model for doing the test in the site we must also implement tags
+class Tests(models.Model):
+    test_text=models.CharField(max_length=40)
+    time=models.DurationField('Duration of exam')
+    times=models.DateField('Date of exam')
+    def __str__(self):
+        return self.test_text
+#Every test will have some questions
+class Question(models.Model):
+    question=models.CharField(max_length=256)
+    testno=models.ForeignKey(Tests,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.question
+# the choices of the respective answersc.
+class Choice(models.Model):
+    choice=models.CharField(max_length=256)
+    questions=models.ForeignKey(Question,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.choice
