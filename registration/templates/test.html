@@ -1,18 +1,28 @@
 {% extends 'base.html' %}
 {% block body %}
 
-{% for t in Test %}
-    {{ t.test_text }}
-</br>
-    {% for q in t.question_set.all %}
-        </br>
-        {{ q.question }}
 
-        {% for c in q.choice_set.all %}
-        </br>
-            <input type="radio">
-            {{ c.choice }}
-        {% endfor %}
+{{ t.test_text }}
+
+    {% for q in t.question_set.all %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+                {{ q.question }}
+            </h3>
+          </div>
+         <form method="post" action="{% url 'test' t.id %}">{% csrf_token %}
+
+             <div class="panel-body">
+            {% for c in q.choice_set.all %}
+                 <input type="hidden" name="question" value="{{ q.id }}"/>
+                  <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ c.id }}" />
+                {{ c.choice }}
+            {% endfor %}
+             </div>
+             <input type="submit" value="answer">
+         </form>
+        </div>
     {% endfor %}
-{% endfor %}
+
 {% endblock %}

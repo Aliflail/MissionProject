@@ -27,7 +27,8 @@ post_save.connect(post_save_user_model_reciever,sender=settings.AUTH_USER_MODEL)
 class Tests(models.Model):
     test_text=models.CharField(max_length=40)
     time=models.DurationField('Duration of exam')
-    times=models.DateField('Date of exam')
+    times=models.DateTimeField('Date of exam')
+    #score=models.TimeField()
     def __str__(self):
         return self.test_text
 #Every test will have some questions
@@ -42,3 +43,6 @@ class Choice(models.Model):
     questions=models.ForeignKey(Question,on_delete=models.CASCADE)
     def __str__(self):
         return self.choice
+class Correct(models.Model):
+    question=models.ForeignKey(Question,on_delete=models.CASCADE)
+    crctans=models.ForeignKey(Choice,on_delete=models.CASCADE)

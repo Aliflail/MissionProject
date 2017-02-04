@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block body %}
+    {% if profile %}
+        {{ user.username }}</br>
+        {{ user.email }}</br>
+        {{ profile.admissionno }}</br>
+        {{ profile.status }}
+    {% endif %}
+{% endblock %}
