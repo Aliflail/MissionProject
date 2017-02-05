@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
+from django.shortcuts import render,redirect,get_object_or_404,HttpResponse,HttpResponseRedirect
 from django.views import View
 from .forms import UserForm,ProfileForm,LoginForm,UserRegisterForm
 from django.contrib.auth import authenticate, login ,logout,get_user_model
@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from .models import Profile,Tests,Question,Choice,Correct
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 class HomeView(LoginRequiredMixin,View):
 	login_url = '/login/'
 	redirect_field_name = '/login/'
@@ -79,8 +80,10 @@ class TestView(LoginRequiredMixin,View):
 	template_name="test.html"
 	def get(self,request,test_id):
 		t=get_object_or_404(Tests,pk=test_id)
+		error=''
 		context={
 			"t":t,
+			"error_message":error
 		}
 		return render(request,self.template_name,context)
 	def post(self,request,test_id):
@@ -89,12 +92,21 @@ class TestView(LoginRequiredMixin,View):
 			q = t.question_set.get(pk=request.POST['question'])
 			selected_choice=q.choice_set.get(pk=request.POST['choice'])
 		except(KeyError,Choice.DoesNotExist):
-			return HttpResponse("Error")
+			context = {
+				"t": t,
+				"error":"you didnt select a choice"
+			}
+			return render(request,self.template_name,context)
 		else:
-			if q.correct_set.get(pk=request.POST['question']) == selected_choice.correct_set.get(pk=request.POST['choice']):
-				return HttpResponse("Correct option")
-			else:
-				return HttpResponse("Incorrect Option")
+			if selected_choice.correct_set.get(pk=request.POST['choice']) :
+				if q.correct_set.get(pk=request.POST['question']) == selected_choice.correct_set.get(pk=request.POST['choice']):
+					t.score+=1
+					t.save()
+					return HttpResponseRedirect(reverse('test', args=(test_id)))
+				else:
+					return HttpResponse("Incorrect Option")
+			return HttpResponse("Correbt option is not specified")
+
 
 @login_required(login_url='login/')
 def profileview(request):

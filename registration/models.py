@@ -28,6 +28,7 @@ class Tests(models.Model):
     test_text=models.CharField(max_length=40)
     time=models.DurationField('Duration of exam')
     times=models.DateTimeField('Date of exam')
+    score=models.IntegerField(default=0)
     #score=models.TimeField()
     def __str__(self):
         return self.test_text
