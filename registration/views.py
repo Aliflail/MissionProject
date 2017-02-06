@@ -3,7 +3,7 @@ from django.views import View
 from .forms import UserForm,ProfileForm,LoginForm,UserRegisterForm
 from django.contrib.auth import authenticate, login ,logout,get_user_model
 from django.contrib.auth.models import User
-from .models import Profile,Tests,Question,Choice,Correct
+from .models import Profile,Tests,Question,Choice,Correct,Testscore
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -88,6 +88,10 @@ class TestView(LoginRequiredMixin,View):
 		return render(request,self.template_name,context)
 	def post(self,request,test_id):
 		t = get_object_or_404(Tests, pk=test_id)
+		if Testscore.objects.get(user=request.user):
+			score=Testscore.objects.get(user=request.user,test=t)
+		else:
+			score=Testscore.objects.create(user=request.user,test=t)
 		try:
 			q = t.question_set.get(pk=request.POST['question'])
 			selected_choice=q.choice_set.get(pk=request.POST['choice'])
@@ -98,14 +102,100 @@ class TestView(LoginRequiredMixin,View):
 			}
 			return render(request,self.template_name,context)
 		else:
-			if selected_choice.correct_set.get(pk=request.POST['choice']) :
+			s = selected_choice.correct_set.filter(pk=request.POST['choice']).count()
+			if s is not 0 :
+				print(q.correct_set.get(pk=request.POST['question']))
+				print(selected_choice.correct_set.filter(pk=request.POST['choice']).count())
 				if q.correct_set.get(pk=request.POST['question']) == selected_choice.correct_set.get(pk=request.POST['choice']):
-					t.score+=1
-					t.save()
+					score.score+=1
+					score.save()
 					return HttpResponseRedirect(reverse('test', args=(test_id)))
+			else:
+				return HttpResponseRedirect(reverse('test', args=(test_id)))
+
+
+
+
+
+
+
+
+class TestQuestionView(LoginRequiredMixin,View):
+	login_url = '/login/'
+	redirect_field_name = '/login/'
+	template_name="question.html"
+	ii = 1
+
+	def get(self,request,test_id):
+		t=get_object_or_404(Tests,pk=test_id)
+		error=''
+		j=1
+
+		for q in Question.objects.filter(testno=t.id):
+			if j < self.ii:
+				j+=1
+			else:
+				break
+		context={
+			"q":q,
+			"t":t,
+			"error_message":error
+		}
+		return render(request,self.template_name,context)
+	def post(self,request,test_id):
+		t = get_object_or_404(Tests, pk=test_id)
+		j=1
+		if Testscore.objects.get(user=request.user):
+			score=Testscore.objects.get(user=request.user,test=t)
+		else:
+			score=Testscore.objects.create(user=request.user,test=t)
+		try:
+			for q in Question.objects.filter(testno=t.id):
+				if j < self.ii:
+					j += 1
 				else:
-					return HttpResponse("Incorrect Option")
-			return HttpResponse("Correbt option is not specified")
+					break
+			selected_choice=q.choice_set.get(pk=request.POST['choice'])
+		except(KeyError,Choice.DoesNotExist):
+			context = {
+				"t": t,
+				"error":"you didnt select a choice"
+			}
+			return render(request,self.template_name,context)
+		else:
+			error = ''
+			s = selected_choice.correct_set.filter(pk=request.POST['choice']).count()
+			if s is not 0 :
+				if q.correct_set.get(pk=self.ii) == selected_choice.correct_set.get(pk=request.POST['choice']):
+					score.score+=1
+					score.save()
+					print(Question.objects.filter(pk=self.ii).count())
+					if Question.objects.filter(pk=self.ii).count() is not 0:
+						self.ii += 1
+						q = Question.objects.get(pk=self.ii)
+					else:
+						return HttpResponse("your score is "+score.score)
+					context = {
+						"q": q,
+						"t": t,
+						"error_message": error
+					}
+					return render(request,self.template_name,context)
+			else:
+				print(Question.objects.filter(pk=self.ii).count())
+				if Question.objects.filter(pk=self.ii).count() is not 0:
+					self.ii += 1
+					q = Question.objects.get(pk=self.ii)
+
+				else:
+					return HttpResponse("your score is " + score.score)
+				context = {
+					"q": q,
+					"t": t,
+					"error_message": error
+				}
+				return render(request, self.template_name, context)
+
 
 
 @login_required(login_url='login/')
