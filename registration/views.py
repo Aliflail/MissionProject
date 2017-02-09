@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect,get_object_or_404,HttpResponse,HttpResponseRedirect
 from django.views import View
 from .forms import UserForm,ProfileForm,LoginForm,UserRegisterForm
-from django.contrib.auth import authenticate, login ,logout,get_user_model
+from django.contrib.auth import authenticate, login ,logout
 from django.contrib.auth.models import User
-from .models import Profile,Tests,Question,Choice,Correct,Testscore
+from .models import Profile,Tests,Question,Choice,Testscore,compilerquestion
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+
 class HomeView(LoginRequiredMixin,View):
 	login_url = '/login/'
 	redirect_field_name = '/login/'
@@ -205,3 +206,13 @@ def profileview(request):
 		"profile":Profile,
 	}
 	return render(request,template_name,context)
+class Compilerq(View):
+	template_name='Compilerq.html'
+	def get(self, request,*args):
+
+		compilerquestio=compilerquestion.objects.get(pk=1)
+		context={
+
+			"q":compilerquestio
+		}
+		return render(request,self.template_name,context)

@@ -1,8 +1,12 @@
 $(function(){
-    $submithide=$(".test form input[type='submit'");
-    $submithide.click(function(e){
-//        e.preventDefault();
-//        $(this).hide();
-    });
+    var myTextarea = $('.codemir')[0];
+    var editor = CodeMirror.fromTextArea(myTextarea, {
+    lineNumbers: true,
+    mode:{
+        name:"text/x-csrc",
+
+    }
+
+  });
 });
 
